@@ -1,19 +1,24 @@
 package Controller
 import Model.Entry._
 import Model.Grid
+
+
 /**
   * Created by evnurm.
   *
   * Handles the input given by the user.
   */
-class InputHandler(private val grid: Grid) {
+object InputHandler {
+
+  private val grid = new Grid
+
 
   private val labels = Vector('0','1','2','3','4','5','6','7','8','9')
                       .zip(Vector(empty,one,two,three,four,five,six,seven,eight,nine))
                       .toMap
 
 
-  def validateInput(in: (Char, (Int,Int))) = {
+  private def validateInput(in: (Char, (Int,Int))) = {
 
     val in1 = in._1
     val in21 = in._2._1
@@ -24,23 +29,22 @@ class InputHandler(private val grid: Grid) {
     in22 <= 9 && in22 >= 1
   }
 
-
-  def processInput(in: (Char,(Int, Int))) = {
+  /** Processes the input and returns the char for the label of the GUI. */
+  def processInput(in: (Char,(Int, Int))): Char = {
 
       val square = in._2._1
       val cell = in._2._2
 
-    if(validateInput(in._1, (square, cell))){
-      val entry = labels(in._1)
+      if(validateInput(in._1, (square, cell))){
+        val entry = labels(in._1)
 
-      /* Now we have to compute the x,y -coordinates
-         of the cell in order to shove it into the Model.*/
-
-
-
-
-
-    } else throw new Exception()
+        try{
+          grid.addEntry(square, cell, entry)
+          if(in._1 == '0') ' ' else in._1
+        } catch {
+          case InvalidLocationException(_) => '_'
+        }
+      } else '_'
   }
 
 }

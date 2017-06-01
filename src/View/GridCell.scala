@@ -4,7 +4,7 @@ import java.awt.Color
 import javax.swing.border.LineBorder
 import scala.swing.{Alignment, Dimension, Label, Panel, Font}
 import Model.Entry._
-
+import Controller.InputHandler
 import scala.swing.event.{KeyTyped, MouseClicked}
 
 /**
@@ -37,7 +37,7 @@ class GridCell(val square: Int, i: Int) extends Panel {
         activate
       } else deactivate
     }
-    case KeyTyped(_, c,_,_) => label.text = c.toString
+    case KeyTyped(_, c,_,_) => changeEntry(c)
   }
 
   /** Activates this cell. */
@@ -56,13 +56,14 @@ class GridCell(val square: Int, i: Int) extends Panel {
     deafTo(keys)
   }
 
-
-
   /** Changes the entry in this cell. */
-  def changeEntry(e: Entry) = {
-   entry = e
-   label.text = labels(e)
-   this.revalidate
-   this.repaint
+  def changeEntry(c: Char) = {
+    val char = InputHandler.processInput((c,(square, i)))
+
+    if(char != '_') {
+      label.text = char.toString
+    }
+    this.revalidate
+    this.repaint
   }
 }

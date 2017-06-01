@@ -1,4 +1,5 @@
 package Model
+import Controller.InvalidLocationException
 import Model.Entry._
 
 /**
@@ -22,15 +23,16 @@ class Grid {
 
   /** Adds an entry into the given cell in the given square, if possible. */
   def addEntry(square: Int, cell: Int, entry: Entry) = {
-      val columnNo = (square - 1)%3 * 3 + cell - 1
-      val rowNo = square + (cell-1)/3
+    val columnNo = (square - 1)%3 * 3 + (cell-1)%3 + 1
 
-      val column = getColumn(columnNo)
-      val row = getRow(rowNo)
+    val rowNo = (square-1)/3 * 3 + (cell - 1) / 3 + 1
 
-      if((column.contains(entry) || row.contains(entry) || grid(square-1).contains(entry)) && entry != empty){
-        throw new Exception("Illegal position for that entry.")
-      } else grid(square-1).changeEntry(cell-1, entry)
+    val column = getColumn(columnNo)
+    val row = getRow(rowNo)
+
+    if((column.contains(entry) || row.contains(entry) || grid(square-1).contains(entry)) && entry != empty){
+      throw new InvalidLocationException("Illegal position for given entry.")
+    } else grid(square-1).changeEntry(cell-1, entry)
   }
 
 
