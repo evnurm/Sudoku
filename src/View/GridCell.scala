@@ -58,12 +58,14 @@ class GridCell(val square: Int, i: Int) extends Panel {
 
   /** Changes the entry in this cell. */
   def changeEntry(c: Char) = {
-    val char = InputHandler.processInput((c,(square, i)))
 
-    if(char != '_') {
-      label.text = char.toString
-    }
+    val processed = InputHandler.processInput((c,(square, i)))
+    if(!processed._2) {
+      if (processed._1 != '_'){
+        label.text = processed._1.toString
+      }
     this.revalidate
     this.repaint
+    }
   }
 }
