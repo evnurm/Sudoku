@@ -30,21 +30,24 @@ object InputHandler {
   }
 
   /** Processes the input and returns the char for the label of the GUI. */
-  def processInput(in: (Char,(Int, Int))): Char = {
+  def processInput(in: (Char,(Int, Int))): (Char, Boolean) = {
 
       val square = in._2._1
       val cell = in._2._2
+      var success = false
+      var char = '_'
 
       if(validateInput(in._1, (square, cell))){
         val entry = labels(in._1)
 
         try{
           grid.addEntry(square, cell, entry)
-          if(in._1 == '0') ' ' else in._1
+          char = if(in._1 == '0') ' ' else in._1
         } catch {
-          case InvalidLocationException(_) => '_'
+          case InvalidLocationException(_) =>
         }
-      } else '_'
+      }
+    (char, success)
   }
 
 }

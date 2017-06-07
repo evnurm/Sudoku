@@ -17,15 +17,9 @@ object View extends SimpleSwingApplication {
 
   val grid = new GridPanel(3,3) {
 
-/*     // place the cells inside the grid
-      for (i <- 1 to 81) {
-       contents += new GridCell(i)
-      }
-*/
-
-    for(i <- 1 to 9){
-      contents += new Square(i)
-    }
+  for(i <- 1 to 9){
+     contents += new Square(i)
+   }
 
   }
 
