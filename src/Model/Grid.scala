@@ -11,28 +11,40 @@ import Model.Entry._
 class Grid {
 
   private val grid = Array.ofDim[Square](9)
-  private var complete = false
 
+  // fill the grid with the squares.
   for(i <- 1 to 9){
     grid(i-1) = new Square(i)
   }
+
+  private var numEmpty = (for(s <- grid) yield s.elements.filter(_ == empty)).flatten.length
+  private var complete = numEmpty == 0
 
   /** Returns the completion status of this grid. */
   def getCompletion = complete
 
 
   /** Adds an entry into the given cell in the given square, if possible. */
-  def addEntry(square: Int, cell: Int, entry: Entry) = {
-    val columnNo = (square - 1)%3 * 3 + (cell-1)%3 + 1
+  def addEntry(squareNo: Int, cellNo: Int, entry: Entry) = {
+    val columnNo = (squareNo - 1)%3 * 3 + (cellNo-1)%3 + 1
 
-    val rowNo = (square-1)/3 * 3 + (cell - 1) / 3 + 1
+    val rowNo = (squareNo-1)/3 * 3 + (cellNo - 1) / 3 + 1
 
     val column = getColumn(columnNo)
     val row = getRow(rowNo)
+    val square = grid(squareNo-1)
 
-    if((column.contains(entry) || row.contains(entry) || grid(square-1).contains(entry)) && entry != empty){
+    if((column.contains(entry) || row.contains(entry) || square.contains(entry)) && entry != empty){
       throw new InvalidLocationException("Illegal position for given entry.")
-    } else grid(square-1).changeEntry(cell-1, entry)
+    } else {
+      if(square.getEntryAt(cellNo-1) == empty){
+        numEmpty -= 1
+      }
+      square.changeEntry(cellNo-1, entry)
+
+      if(numEmpty == 0) complete = true // the grid is complete.
+
+    }
   }
 
 

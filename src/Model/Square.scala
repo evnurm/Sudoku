@@ -19,4 +19,6 @@ class Square(val index: Int){
 
   /** Checks whether or not this square contains the given entry. */
   def contains(e: Entry) = contents.contains(e)
+
+  def elements = this.contents
 }
