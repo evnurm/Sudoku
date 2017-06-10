@@ -2,9 +2,11 @@ package View
 
 import java.awt.Color
 import javax.swing.border.LineBorder
-import scala.swing.{Alignment, Dimension, Label, Panel, Font}
+
+import scala.swing.{Alignment, Dimension, Font, Label, Panel}
 import Model.Entry._
 import Controller.InputHandler
+
 import scala.swing.event.{KeyTyped, MouseClicked}
 
 /**
