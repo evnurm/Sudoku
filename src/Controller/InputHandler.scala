@@ -34,20 +34,20 @@ object InputHandler {
 
       val square = in._2._1
       val cell = in._2._2
-      var success = false
+      var complete = grid.getCompletion
       var char = '_'
 
       if(validateInput(in._1, (square, cell))){
         val entry = labels(in._1)
 
         try{
-          grid.addEntry(square, cell, entry)
+          complete = grid.addEntry(square, cell, entry)
           char = if(in._1 == '0') ' ' else in._1
         } catch {
           case InvalidLocationException(_) =>
         }
       }
-    (char, success)
+    (char, complete)
   }
 
 }

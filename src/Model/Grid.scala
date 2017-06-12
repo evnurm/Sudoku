@@ -25,7 +25,7 @@ class Grid {
 
 
   /** Adds an entry into the given cell in the given square, if possible. */
-  def addEntry(squareNo: Int, cellNo: Int, entry: Entry) = {
+  def addEntry(squareNo: Int, cellNo: Int, entry: Entry): Boolean = {
     val columnNo = (squareNo - 1)%3 * 3 + (cellNo-1)%3 + 1
 
     val rowNo = (squareNo-1)/3 * 3 + (cellNo - 1) / 3 + 1
@@ -34,17 +34,20 @@ class Grid {
     val row = getRow(rowNo)
     val square = grid(squareNo-1)
 
+    complete = numEmpty == 0
+
     if((column.contains(entry) || row.contains(entry) || square.contains(entry)) && entry != empty){
       throw new InvalidLocationException("Illegal position for given entry.")
     } else {
-      if(square.getEntryAt(cellNo-1) == empty){
+      if(square.getEntryAt(cellNo-1) == empty && entry != empty){
         numEmpty -= 1
+      } else if(square.getEntryAt(cellNo-1) != empty && entry == empty){
+        numEmpty += 1
       }
       square.changeEntry(cellNo-1, entry)
 
-      if(numEmpty == 0) complete = true // the grid is complete.
-
     }
+    complete
   }
 
 

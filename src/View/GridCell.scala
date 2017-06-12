@@ -23,8 +23,6 @@ class GridCell(val square: Int, i: Int) extends Panel {
 
   private var active = false
 
-  private var entry = empty
-
   private val label = new Label("")
   label.font = new Font("Verdana",0,25)
   label.horizontalAlignment = Alignment.Center
@@ -61,13 +59,16 @@ class GridCell(val square: Int, i: Int) extends Panel {
   /** Changes the entry in this cell. */
   def changeEntry(c: Char) = {
 
-    val processed = InputHandler.processInput((c,(square, i)))
-    if(!processed._2) {
-      if (processed._1 != '_'){
+    val processed = InputHandler.processInput((c, (square, i)))
+    if (!processed._2) {
+      if (processed._1 != '_') {
         label.text = processed._1.toString
+      } else {
+
       }
-    this.revalidate
-    this.repaint
+      revalidate
+      repaint
     }
   }
+
 }
