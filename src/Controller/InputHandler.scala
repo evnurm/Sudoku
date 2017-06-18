@@ -10,12 +10,16 @@ import Model.Grid
   */
 object InputHandler {
 
-  private val grid = new Grid
+  private var grid = new Grid
 
 
   private val labels = Vector('0','1','2','3','4','5','6','7','8','9')
                       .zip(Vector(empty,one,two,three,four,five,six,seven,eight,nine))
                       .toMap
+
+
+  def initGrid(): Unit = this.grid = new Grid
+
 
 
   private def validateInput(in: (Char, (Int,Int))) = {

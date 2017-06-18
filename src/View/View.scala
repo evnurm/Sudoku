@@ -1,6 +1,9 @@
 package View
 
-import scala.swing.{BoxPanel, Button, Dimension, GridPanel, MainFrame, Orientation, SimpleSwingApplication}
+import Controller.InputHandler
+
+import scala.swing.event.ButtonClicked
+import scala.swing.{BoxPanel, Button, GridPanel, MainFrame, Orientation, Panel, SimpleSwingApplication}
 
 /**
   * Created by evnurm.
@@ -12,7 +15,6 @@ object View extends SimpleSwingApplication {
   override def top = new MainFrame{
     title = "Sudoku"
     contents = container
-   // preferredSize = new Dimension(500,500)
   }
 
   val container = new BoxPanel(Orientation.Vertical)
@@ -20,11 +22,19 @@ object View extends SimpleSwingApplication {
   val options = new BoxPanel(Orientation.Horizontal){
     val newGame = new Button("New game")
     contents += newGame
+
+    listenTo(newGame)
+
+    reactions += {
+      case ButtonClicked(`newGame`) => {
+        // Initialize a new grid and empty the grid in the UI.
+        InputHandler.initGrid()
+        grid.contents.map(_.asInstanceOf[Square]).foreach(_.contents.map(_.asInstanceOf[GridCell]).foreach(_.changeEntry('0')))
+      }
+    }
   }
 
-
-
-  val grid = new GridPanel(3,3) {
+  var grid: Panel = new GridPanel(3,3) {
 
   for(i <- 1 to 9){
      contents += new Square(i)

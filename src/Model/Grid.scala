@@ -35,6 +35,7 @@ class Grid {
     val square = grid(squareNo-1)
 
     complete = numEmpty == 0
+    if(complete) return complete
 
     if((column.contains(entry) || row.contains(entry) || square.contains(entry)) && entry != empty){
       throw new InvalidLocationException("Illegal position for given entry.")

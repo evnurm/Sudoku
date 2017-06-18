@@ -4,10 +4,9 @@ import java.awt.Color
 import javax.swing.border.LineBorder
 
 import scala.swing.{Alignment, Dimension, Font, Label, Panel}
-import Model.Entry._
 import Controller.InputHandler
 
-import scala.swing.event.{KeyTyped, MouseClicked}
+import scala.swing.event.{Key, KeyReleased, KeyTyped, MouseClicked}
 
 /**
   * Created by evnurm.
@@ -34,15 +33,22 @@ class GridCell(val square: Int, i: Int) extends Panel {
   reactions += {
     case e: MouseClicked if e.peer.getButton == 1 => {
       if (!active) {
-        activate
-      } else deactivate
+        activate()
+      } else deactivate()
     }
+
+ /*   // For key-based navigation
+    case KeyReleased(_, c, _, _)
+      if c == Key.Up || c == Key.Down || c == Key.Right || c == Key.Left => switchCell(c)
+*/
+
     case KeyTyped(_, c,_,_) => changeEntry(c)
+
   }
 
   /** Activates this cell. */
-  def activate = {
-    View.grid.contents.map(_.asInstanceOf[Square]).foreach(_.contents.map(_.asInstanceOf[GridCell]).foreach(_.deactivate))
+  def activate(): Unit = {
+    View.grid.contents.map(_.asInstanceOf[Square]).foreach(_.contents.map(_.asInstanceOf[GridCell]).foreach(_.deactivate()))
     active = true
     border = new LineBorder(Color.BLACK)
     requestFocus()
@@ -50,25 +56,39 @@ class GridCell(val square: Int, i: Int) extends Panel {
   }
 
   /** Deactivates this cell. */
-  def deactivate = {
+  def deactivate(): Unit = {
     active = false
     border = new LineBorder(Color.LIGHT_GRAY)
     deafTo(keys)
   }
 
   /** Changes the entry in this cell. */
-  def changeEntry(c: Char) = {
+  def changeEntry(c: Char): Unit = {
 
     val processed = InputHandler.processInput((c, (square, i)))
     if (!processed._2) {
       if (processed._1 != '_') {
         label.text = processed._1.toString
-      } else {
-
       }
       revalidate
       repaint
+    } else {
+    javax.swing.JOptionPane.showMessageDialog(null, "Congrats! You solved the sudoku!")
     }
+  }
+
+
+  /** Switches the active cell according to the given key. */
+  private def switchCell(c: Key.Value): Unit ={
+
+    val map = Map(Key.Up -> -3, Key.Down -> 3, Key.Right -> 1, Key.Left -> -1)
+
+    val newIndex = i + map(c)
+    if(newIndex < 0)
+
+    deactivate()
+
+
   }
 
 }
