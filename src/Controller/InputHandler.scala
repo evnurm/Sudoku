@@ -17,7 +17,7 @@ object InputHandler {
                       .zip(Vector(empty,one,two,three,four,five,six,seven,eight,nine))
                       .toMap
 
-
+  /** Initializes a new empty grid (model). */
   def initGrid(): Unit = this.grid = new Grid
 
 

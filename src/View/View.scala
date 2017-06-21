@@ -17,6 +17,8 @@ object View extends SimpleSwingApplication {
     contents = container
   }
 
+  var activeCell: GridCell = null
+
   val container = new BoxPanel(Orientation.Vertical)
 
   val options = new BoxPanel(Orientation.Horizontal){
@@ -43,7 +45,4 @@ object View extends SimpleSwingApplication {
 
   container.contents += options
   container.contents += grid
-
-
-
 }

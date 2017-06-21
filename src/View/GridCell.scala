@@ -48,7 +48,9 @@ class GridCell(val square: Int, i: Int) extends Panel {
 
   /** Activates this cell. */
   def activate(): Unit = {
-    View.grid.contents.map(_.asInstanceOf[Square]).foreach(_.contents.map(_.asInstanceOf[GridCell]).foreach(_.deactivate()))
+
+    if(View.activeCell != null) View.activeCell.deactivate()
+    View.activeCell = this
     active = true
     border = new LineBorder(Color.BLACK)
     requestFocus()
@@ -76,7 +78,6 @@ class GridCell(val square: Int, i: Int) extends Panel {
     javax.swing.JOptionPane.showMessageDialog(null, "Congrats! You solved the sudoku!")
     }
   }
-
 
   /** Switches the active cell according to the given key. */
   private def switchCell(c: Key.Value): Unit ={
